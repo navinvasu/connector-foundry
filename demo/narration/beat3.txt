@@ -1,0 +1,1 @@
+Paste an OpenAPI, Swagger, docs, or Postman link — and the API is in.

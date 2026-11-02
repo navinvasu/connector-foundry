@@ -1,0 +1,1 @@
+Meta's Muse Spark drafts the agent tasks — realistic user requests per toolset — plus the evaluation scenarios. I pick the ones to run. Every approved tool is exercised live against the real API and judged by Muse Spark — and a fully green run certifies these tools ready to publish.

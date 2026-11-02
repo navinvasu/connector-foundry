@@ -1,0 +1,1 @@
+Promote to prod — certification-gated, so only the green run ships. Spec to tools to review to evaluation to release to live telemetry: the complete pipeline, running.

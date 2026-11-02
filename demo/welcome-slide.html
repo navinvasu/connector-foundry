@@ -1,0 +1,78 @@
+<!doctype html>
+<!-- Connector Foundry — demo welcome slide (16:9 title card).
+  Render to PNG (1920x1080) with the website venv:
+    ../website/.venv/bin/python -c "
+    from weasyprint import HTML; import subprocess, tempfile, os, shutil;
+    d = tempfile.mkdtemp(); p = os.path.join(d, 's.pdf');
+    HTML('welcome-slide.html', base_url='.').write_pdf(p);
+    subprocess.run(['pdftoppm', '-png', '-r', '96', '-singlefile', p, os.path.join(d, 'out')], check=True);
+    shutil.move(os.path.join(d, 'out.png'), 'welcome-slide.png')"
+  Or open fullscreen in a browser (1920x1080 window) and capture. -->
+<html><head><meta charset="utf-8">
+<style>
+  @page { size: 1920px 1080px; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #060a13; color: #e2e8f0;
+    -webkit-font-smoothing: antialiased;
+  }
+  .slide { width: 1920px; height: 1080px; overflow: hidden; background: #060a13; display: flex; flex-direction: column; }
+  .accent { height: 6px; background: #ffa02e; flex-shrink: 0; }
+  .body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 150px; }
+  .brandrow { display: flex; align-items: center; margin-bottom: 34px; }
+  .brand-mark {
+    width: 60px; height: 60px; margin-right: 20px; flex-shrink: 0;
+  }
+  .brand-name { font-size: 22px; font-weight: 800; letter-spacing: .14em; color: #f1f5f9; }
+  .brand-sub { font-size: 15px; color: #64748b; letter-spacing: .22em; margin-top: 5px; }
+  .eyebrow { font-size: 21px; letter-spacing: .3em; color: #ffa02e; font-weight: 700; margin-bottom: 20px; }
+  h1 { font-size: 102px; line-height: 1.06; font-weight: 800; color: #f8fafc; letter-spacing: -0.015em; }
+  h1 .neon { color: #ffa02e; }
+  .sub { font-size: 29px; color: #94a3b8; margin-top: 24px; max-width: 1350px; line-height: 1.45; }
+  .steps { display: flex; margin-top: 52px; }
+  .step { flex: 1; border-top: 2px solid rgba(255,255,255,.14); margin-right: 44px; padding-top: 16px; }
+  .step:last-child { margin-right: 0; }
+  .step .n { font-size: 19px; font-weight: 800; color: #ffa02e; letter-spacing: .1em; }
+  .step .t { font-size: 24px; font-weight: 600; color: #e2e8f0; margin-top: 6px; }
+  .step .d { font-size: 18px; color: #64748b; margin-top: 5px; line-height: 1.45; }
+  .foot {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 150px; border-top: 1px solid rgba(255,255,255,.08);
+    font-size: 19px; color: #64748b; letter-spacing: .06em; flex-shrink: 0;
+  }
+  .pill {
+    border: 1px solid rgba(255,255,255,.16); border-radius: 999px;
+    padding: 10px 26px; font-size: 18px; font-weight: 700; letter-spacing: .12em; color: #cbd5e1;
+  }
+</style>
+</head>
+<body><div class="slide">
+  <div class="accent"></div>
+  <div class="body">
+    <div class="brandrow">
+      <svg class="brand-mark" width="60" height="60" viewBox="0 0 60 60" role="img" aria-label="Connector Foundry mark">
+        <rect x="2" y="2" width="56" height="56" rx="14" fill="#0c1322" stroke="#ffa02e" stroke-opacity="0.6" stroke-width="2"/>
+        <path d="M46 30 L38 43.9 L22 43.9 L14 30 L22 16.1 L38 16.1 Z" fill="none" stroke="#ffa02e" stroke-width="2.4" stroke-linejoin="round"/>
+        <circle cx="30" cy="30" r="3.4" fill="#ffa02e"/>
+      </svg>
+      <div>
+        <div class="brand-name">CONNECTOR FOUNDRY</div>
+        <div class="brand-sub">LIVE DEMO</div>
+      </div>
+    </div>
+    <div class="eyebrow">WELCOME</div>
+    <h1>From your API<br>to a <span class="neon">tested agent connector</span><br>in under 5 minutes.</h1>
+    <p class="sub">Bring any REST API. Foundry drafts the tools, you approve them, it proves them against live sandboxes — then ships MCP, OpenAI, and Muse connectors.</p>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><div class="t">Bring your API</div><div class="d">OpenAPI URL, spec file, or Postman collection.</div></div>
+      <div class="step"><div class="n">02</div><div class="t">Approve tools</div><div class="d">Review each draft — nothing ships without sign-off.</div></div>
+      <div class="step"><div class="n">03</div><div class="t">Evaluate live</div><div class="d">Real sandbox proof, certified before release.</div></div>
+      <div class="step"><div class="n">04</div><div class="t">Publish everywhere</div><div class="d">One release: MCP server, OpenAI, Muse kit.</div></div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>connector-foundry &middot; demo</div>
+    <div class="pill">MCP + OPENAI + META MUSE</div>
+  </div>
+</div></body></html>

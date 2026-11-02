@@ -1,0 +1,75 @@
+<!doctype html>
+<!-- Connector Foundry — demo slide 2: what existed vs what was built (16:9).
+  Render to PNG (1920x1080) with the website venv (from this directory):
+    ../website/.venv/bin/python -c "
+    from weasyprint import HTML; import subprocess, tempfile, os, shutil;
+    d = tempfile.mkdtemp(); p = os.path.join(d, 's.pdf');
+    HTML('before-built-slide.html', base_url='.').write_pdf(p);
+    subprocess.run(['pdftoppm', '-png', '-r', '96', '-singlefile', p, os.path.join(d, 'out')], check=True);
+    shutil.move(os.path.join(d, 'out.png'), 'before-built-slide.png')"
+  Or open fullscreen in a browser (1920x1080 window) and capture. -->
+<html><head><meta charset="utf-8">
+<style>
+  @page { size: 1920px 1080px; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #060a13; color: #e2e8f0;
+    -webkit-font-smoothing: antialiased;
+  }
+  .slide { width: 1920px; height: 1080px; overflow: hidden; background: #060a13; display: flex; flex-direction: column; }
+  .accent { height: 6px; background: #ffa02e; flex-shrink: 0; }
+  .body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 150px; }
+  .eyebrow { font-size: 21px; letter-spacing: .3em; color: #ffa02e; font-weight: 700; margin-bottom: 20px; }
+  h1 { font-size: 96px; line-height: 1.06; font-weight: 800; color: #f8fafc; letter-spacing: -0.015em; }
+  h1 .neon { color: #ffa02e; }
+  .cols { display: flex; margin-top: 56px; }
+  .col { flex: 1; border-top: 2px solid rgba(255,255,255,.14); margin-right: 60px; padding-top: 22px; }
+  .col:last-child { margin-right: 0; border-top-color: rgba(255,160,46,.55); }
+  .col .k { font-size: 20px; font-weight: 800; letter-spacing: .22em; color: #64748b; margin-bottom: 20px; }
+  .col.hot .k { color: #ffa02e; }
+  .item { display: flex; margin-bottom: 16px; }
+  .item:last-child { margin-bottom: 0; }
+  .item .dot {
+    width: 12px; height: 12px; border-radius: 999px; flex-shrink: 0;
+    background: #334155; margin: 10px 18px 0 0;
+  }
+  .col.hot .dot { background: #ffa02e; }
+  .item .t { font-size: 29px; font-weight: 600; color: #e2e8f0; line-height: 1.35; }
+  .item .t small { display: block; font-size: 21px; font-weight: 400; color: #64748b; margin-top: 2px; }
+  .foot {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 150px; border-top: 1px solid rgba(255,255,255,.08);
+    font-size: 19px; color: #64748b; letter-spacing: .06em; flex-shrink: 0;
+  }
+  .pill {
+    border: 1px solid rgba(255,255,255,.16); border-radius: 999px;
+    padding: 10px 26px; font-size: 18px; font-weight: 700; letter-spacing: .12em; color: #cbd5e1;
+  }
+</style>
+</head>
+<body><div class="slide">
+  <div class="accent"></div>
+  <div class="body">
+    <div class="eyebrow">THE STARTING LINE</div>
+    <h1>Before: screens. <span class="neon">This week: a pipeline.</span></h1>
+    <div class="cols">
+      <div class="col">
+        <div class="k">BEFORE THE EVENT</div>
+        <div class="item"><div class="dot"></div><div class="t">A few UI screens<small>Tools, review, publish — mockups with no engine behind them.</small></div></div>
+        <div class="item"><div class="dot"></div><div class="t">No working flow<small>No agent tasks, no live evaluation, no releases.</small></div></div>
+      </div>
+      <div class="col hot">
+        <div class="k">BUILT DURING THE EVENT</div>
+        <div class="item"><div class="dot"></div><div class="t">Meta Muse generates the agent tasks<small>Real user requests per toolset, proposed for approval.</small></div></div>
+        <div class="item"><div class="dot"></div><div class="t">Live model-judged evaluation<small>Every approved tool proven against the real upstream.</small></div></div>
+        <div class="item"><div class="dot"></div><div class="t">Tested end to end: Claude Code + localhost<small>Full runs recorded locally, failures fixed, re-run green.</small></div></div>
+        <div class="item"><div class="dot"></div><div class="t">Built with Muse-code, decided with spikes<small>Coding tasks and risky calls de-risked by spikes first.</small></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>connector-foundry &middot; demo</div>
+    <div class="pill">BUILT OCT 26 &ndash; NOV 4</div>
+  </div>
+</div></body></html>

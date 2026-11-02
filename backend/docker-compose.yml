@@ -1,0 +1,27 @@
+# Local PostgreSQL for Connector Foundry development.
+# This is the local stand-in for Amazon RDS PostgreSQL: same engine, same SQL.
+# (LocalStack does not emulate RDS — it covers AWS APIs like S3/Lambda/SQS.)
+#
+# Usage:  docker compose up -d        (from this directory)
+#         docker compose down         (stop; add -v to drop the data volume)
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: connector-foundry-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: connector_foundry
+    ports:
+      - "5432:5432"
+    volumes:
+      - cf-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d connector_foundry"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  cf-postgres-data:

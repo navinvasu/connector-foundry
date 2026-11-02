@@ -1,0 +1,37 @@
+# Connector Foundry on the lite host (IN-10, D-86): the API container and
+# Postgres 16 on one EC2 instance, behind CloudFront (api.connectorfoundry.com).
+# The host's user_data writes /opt/connector-foundry/.env from SSM and runs:
+#   docker compose -f compose.host.yml --env-file .env up -d
+# Migrations run when the API boots. Data lives on the instance's EBS volume.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: connector_foundry
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: connector_foundry
+    volumes:
+      - /var/lib/connector-foundry/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U connector_foundry -d connector_foundry"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    image: ${CF_IMAGE:?set CF_IMAGE to the ECR image}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: "4000"
+      DATABASE_URL: postgres://connector_foundry:${POSTGRES_PASSWORD}@postgres:5432/connector_foundry
+      # CloudFront is the only proxy in front of the host.
+      CF_TRUST_PROXY_HOPS: "1"
+    ports:
+      - "80:4000"

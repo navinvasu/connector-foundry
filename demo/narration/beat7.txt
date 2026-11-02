@@ -1,0 +1,1 @@
+Muse Spark works through the documentation and raises each finding — I acknowledge or resolve them all before anything moves forward. Nothing unreviewed ships.

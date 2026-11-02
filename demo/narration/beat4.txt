@@ -1,0 +1,1 @@
+The dashboard tracks every stage of the pipeline.

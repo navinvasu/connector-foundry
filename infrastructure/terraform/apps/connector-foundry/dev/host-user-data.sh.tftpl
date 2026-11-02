@@ -1,0 +1,57 @@
+#!/bin/bash
+# Connector Foundry host bootstrap (first boot only). Installs Docker +
+# Compose, mounts the data volume, writes the compose file and deploy.sh,
+# then deploys. Later deploys: run /opt/connector-foundry/deploy.sh through
+# SSM Run Command (apply-runbook.md). No secrets are written here; deploy.sh
+# reads them from SSM at deploy time.
+set -euo pipefail
+exec > >(tee -a /var/log/connector-foundry-bootstrap.log) 2>&1
+
+dnf install -y docker
+systemctl enable --now docker
+mkdir -p /usr/local/lib/docker/cli-plugins
+curl -fsSL "https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-aarch64" \
+  -o /usr/local/lib/docker/cli-plugins/docker-compose
+chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+
+# ─── Data volume (Postgres) — wait for the attachment, format once ─────────
+SERIAL="$(echo '${data_volume_id}' | tr -d '-')"
+for i in $(seq 1 60); do
+  DEV="$(lsblk -dpno NAME,SERIAL | awk -v s="$SERIAL" '$2==s {print $1}')"
+  [ -n "$DEV" ] && break
+  sleep 5
+done
+if [ -z "$${DEV:-}" ]; then echo "data volume ${data_volume_id} not attached"; exit 1; fi
+blkid "$DEV" >/dev/null 2>&1 || mkfs.xfs "$DEV"
+mkdir -p /var/lib/connector-foundry
+UUID="$(blkid -s UUID -o value "$DEV")"
+grep -q "$UUID" /etc/fstab || echo "UUID=$UUID /var/lib/connector-foundry xfs defaults,nofail 0 2" >> /etc/fstab
+mount -a
+
+# ─── App files ───────────────────────────────────────────────────────────────
+mkdir -p /opt/connector-foundry
+cat > /opt/connector-foundry/compose.host.yml <<'COMPOSE'
+${compose_yaml}
+COMPOSE
+
+cat > /opt/connector-foundry/deploy.sh <<'DEPLOY'
+#!/bin/bash
+# Rebuild .env from SSM, pull the pinned image, (re)start the stack.
+set -euo pipefail
+cd /opt/connector-foundry
+umask 077
+aws ssm get-parameters-by-path --region ${region} --path '${ssm_prefix}/' --with-decryption \
+  --query 'Parameters[].[Name,Value]' --output text \
+  | awk -F'\t' '{ n=$1; sub(".*/", "", n); print n "=" $2 }' > .env.new
+mv .env.new .env
+IMAGE="$(grep '^CF_IMAGE=' .env | cut -d= -f2-)"
+REGISTRY="$${IMAGE%%/*}"
+aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin "$REGISTRY"
+docker compose -f compose.host.yml --env-file .env pull api
+docker compose -f compose.host.yml --env-file .env up -d --remove-orphans
+docker image prune -f >/dev/null
+DEPLOY
+chmod 700 /opt/connector-foundry/deploy.sh
+
+# The first deploy fails harmlessly until an image is pushed; deploy again then.
+/opt/connector-foundry/deploy.sh || echo "first deploy skipped: push an image, then run deploy.sh"

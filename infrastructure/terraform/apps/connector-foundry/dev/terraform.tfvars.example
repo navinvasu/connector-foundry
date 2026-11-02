@@ -1,0 +1,24 @@
+# Copy to terraform.tfvars and fill in. NEVER commit terraform.tfvars.
+# cp terraform.tfvars.example terraform.tfvars
+# Everything has a working default; most applies need no tfvars at all.
+
+# Dev/demo: always false — the demo uses the AWS-generated CloudFront/Cognito
+# URLs. Custom domains are production-only; see ../path-to-prod.md.
+enable_custom_domains = false
+
+instance_type  = "t4g.small"
+data_volume_gb = 20
+
+# Stripe — leave blank until taking payments (billing endpoints answer 503).
+stripe_secret_key     = ""
+stripe_webhook_secret = ""
+
+# Initial language model (D-88). Later switches go straight to SSM:
+#   aws ssm put-parameter --overwrite --name /connector-foundry/dev/env/CF_LLM_PROVIDER --value openai_compatible
+# HACKATHON-ONLY (H-01): Muse Spark for the demo. Revert to bedrock / us.amazon.nova-2-lite-v1:0 after.
+llm_provider = "openai_compatible"
+llm_model    = "muse-spark-1.3"
+llm_base_url = "https://api.meta.ai/v1"
+llm_api_key  = "" # fill from the Meta Model API key; never commit terraform.tfvars
+
+tags = {}

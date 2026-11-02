@@ -1,0 +1,45 @@
+# Copy to terraform.tfvars and fill in. NEVER commit terraform.tfvars.
+# cp terraform.tfvars.example terraform.tfvars
+
+project_name = "connector-foundry"
+environment  = "prod"
+aws_region   = "us-east-1"
+
+domain_name       = "connectorfoundry.com"
+api_subdomain     = "api"
+console_subdomain = "console"
+
+# Fill in after pushing the backend image (see README step 2).
+backend_image_uri = ""
+ecs_cpu           = 512
+ecs_memory        = 1024
+ecs_desired_count = 1
+
+cognito_callback_urls = ["https://console.connectorfoundry.com/auth/callback"]
+cognito_logout_urls   = ["https://console.connectorfoundry.com/"]
+
+# ─── Secrets — generate/pass at apply time, keep blank in this file ─────────
+cf_signing_secret    = "" # openssl rand -hex 32
+stripe_secret_key    = "" # sk_test_... (leave blank until taking payments)
+stripe_webhook_secret = "" # whsec_... from `stripe listen` or dashboard
+
+console_base_url = "https://console.connectorfoundry.com"
+cf_cors_origins  = "https://console.connectorfoundry.com"
+cf_dev_email     = "dev@connectorfoundry.local"
+
+cf_upstream_timeout_ms      = "20000"
+cf_circuit_failure_threshold = "5"
+cf_circuit_cooldown_ms       = "30000"
+cf_dunning_restrict_days     = "7"
+cf_dunning_suspend_days      = "14"
+
+cf_report_s3_prefix       = "eval-reports"
+cf_report_url_ttl_seconds = "3600"
+reports_retention_days    = 90
+
+tags = {}
+
+# ─── Telemetry + support (shared infra, first deployment) ────────────────────
+# telemetry_retention_days = 365   # S3 lake cap, 12-month architecture max (default)
+# support_ops_email = ""           # SNS new-ticket ping recipient; AWS emails a
+                                   # confirmation link first. Leave blank for none.

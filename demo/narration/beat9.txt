@@ -1,0 +1,1 @@
+Release one freezes these tools in staging. The Claude MCP server, OpenAI functions, and the Muse connector are generated — ready to download, with the Muse kit ready to submit.

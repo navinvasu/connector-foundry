@@ -1,0 +1,1 @@
+Before this week: screens, no engine. This week: the working pipeline — Meta's Muse Spark generates the tasks and judges the runs, tested end to end on localhost.

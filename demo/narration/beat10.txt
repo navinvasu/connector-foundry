@@ -1,0 +1,1 @@
+Same release, now running inside Claude Code over MCP. Real prompt, live answers from the API — and the same test path works for OpenAI and Meta Muse with their connectors.

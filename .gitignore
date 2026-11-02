@@ -1,0 +1,20 @@
+# Deps and builds — reinstall from the lockfiles.
+node_modules/
+web/dist/
+backend/server/dist/
+
+# Local secrets — copy the .example files instead.
+.env
+*.db
+*.db-shm
+*.db-wal
+
+# Terraform runtime state.
+*.tfstate
+*.tfstate.backup
+.terraform/
+terraform.tfvars
+
+# OS / editor noise.
+.DS_Store
+*.log

@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes pop-in {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@layer utilities {
+  .animate-pop-in {
+    animation: pop-in 0.45s ease-out both;
+  }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-ink-950 text-slate-200 antialiased font-sans;
+    background-image:
+      radial-gradient(1200px 500px at 20% -10%, rgba(255, 160, 46, 0.07), transparent 60%),
+      radial-gradient(900px 420px at 90% 0%, rgba(244, 114, 182, 0.05), transparent 60%);
+    background-attachment: fixed;
+  }
+  ::selection {
+    background: rgba(255, 160, 46, 0.3);
+  }
+  /* FE-06: preformatted blocks scroll inside their own box, never the page */
+  pre {
+    max-width: 100%;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #060b16;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1b2942;
+    border-radius: 8px;
+    border: 2px solid #060b16;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #28405f;
+  }
+}
+
+@layer components {
+  /* ── Buttons ─────────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-ink-950 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-neon text-ink-950 font-semibold hover:bg-orange-300 focus:ring-neon shadow-glow;
+  }
+  .btn-secondary {
+    @apply btn bg-white/5 text-slate-200 border border-white/15 hover:bg-white/10 hover:border-white/25 focus:ring-neon;
+  }
+  .btn-danger {
+    @apply btn bg-red-500/90 text-white hover:bg-red-500 focus:ring-red-400;
+  }
+  .btn-ghost {
+    @apply btn text-slate-400 hover:bg-white/5 hover:text-slate-200 focus:ring-slate-500;
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  /* ── Cards / panels ──────────────────────────────────── */
+  .card {
+    @apply bg-ink-800/80 rounded-xl border border-white/10 shadow-card backdrop-blur-sm;
+  }
+  .card-pad {
+    @apply card p-5;
+  }
+  .panel-glow {
+    position: relative;
+  }
+  .panel-glow::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 160, 46, 0.6), transparent);
+    border-radius: 9999px;
+  }
+
+  /* ── KPI card (command-center stat) ───────────────────── */
+  .kpi-card {
+    @apply card p-5 relative overflow-hidden;
+  }
+  .kpi-card::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--kpi-accent, #ffa02e), transparent 70%);
+    opacity: 0.7;
+  }
+  .kpi-tag {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-[0.14em];
+  }
+  .kpi-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 mt-3;
+  }
+  .kpi-value {
+    @apply font-display text-4xl font-semibold text-white mt-1 tracking-tight;
+  }
+  .kpi-sub {
+    @apply text-xs text-slate-500 mt-1.5;
+  }
+  .kpi-delta {
+    @apply text-xs font-mono font-medium;
+  }
+
+  /* ── Micro labels / section headers ──────────────────── */
+  .micro-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500;
+  }
+  .section-index {
+    @apply inline-flex items-center px-2.5 py-1 rounded-md bg-neon/10 border border-neon/25 text-neon text-[11px] font-mono font-semibold tracking-[0.14em];
+  }
+  .section-title {
+    @apply font-display text-lg font-semibold uppercase tracking-[0.08em] text-white;
+  }
+  .section-hint {
+    @apply text-xs text-slate-500 font-mono;
+  }
+  .page-title {
+    @apply font-display text-3xl font-bold uppercase tracking-[0.04em] text-white;
+  }
+  .page-sub {
+    @apply text-sm text-slate-400 mt-1;
+  }
+
+  /* ── Ticker strip ─────────────────────────────────────── */
+  .ticker-wrap {
+    @apply relative overflow-hidden border-y border-white/10 bg-ink-900/60;
+    mask-image: linear-gradient(90deg, transparent, black 4%, black 96%, transparent);
+  }
+  .ticker-track {
+    @apply flex w-max items-center gap-8 py-2.5 animate-ticker;
+  }
+  .ticker-item {
+    @apply flex items-center gap-8 text-xs font-mono text-slate-400 whitespace-nowrap;
+  }
+  .ticker-dot {
+    @apply inline-block w-1.5 h-1.5 rotate-45 bg-neon/70 shrink-0;
+  }
+
+  /* ── Neon divider ─────────────────────────────────────── */
+  .neon-line {
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 160, 46, 0.55), rgba(255, 160, 46, 0.06) 55%, transparent);
+  }
+
+  /* ── Snapshot pill ────────────────────────────────────── */
+  .snapshot-pill {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-[11px] font-mono tracking-[0.12em] text-slate-300;
+  }
+  .live-dot {
+    @apply w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulseDot;
+  }
+
+  /* ── Forms ────────────────────────────────────────────── */
+  .input {
+    @apply w-full px-3 py-2 bg-ink-900 border border-white/15 rounded-lg text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-neon focus:border-transparent placeholder-slate-500;
+  }
+  .label {
+    @apply block text-sm font-medium text-slate-300 mb-1;
+  }
+
+  /* ── Badges ───────────────────────────────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border;
+  }
+  .badge-green { @apply badge bg-emerald-400/10 text-emerald-300 border-emerald-400/25; }
+  .badge-red { @apply badge bg-red-400/10 text-red-300 border-red-400/25; }
+  .badge-amber { @apply badge bg-amber-400/10 text-amber-300 border-amber-400/25; }
+  .badge-blue { @apply badge bg-neon/10 text-neon border-neon/25; }
+  .badge-gray { @apply badge bg-white/5 text-slate-400 border-white/10; }
+  .badge-purple { @apply badge bg-fuchsia-400/10 text-fuchsia-300 border-fuchsia-400/25; }
+
+  /* ── Tables ───────────────────────────────────────────── */
+  .table-th {
+    @apply px-4 py-2.5 text-left text-[11px] font-semibold text-slate-500 uppercase tracking-[0.14em];
+  }
+  .table-td {
+    @apply px-4 py-3 text-sm text-slate-300;
+  }
+
+  /* ── Misc ─────────────────────────────────────────────── */
+  .mono {
+    @apply font-mono text-[13px];
+  }
+  .code-block {
+    @apply mono bg-ink-950 text-slate-200 rounded-lg p-4 overflow-x-auto text-xs leading-relaxed border border-white/10;
+  }
+}
